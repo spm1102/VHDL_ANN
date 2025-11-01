@@ -12,9 +12,16 @@ def train_loop(model, epochs, train_dataloader, test_dataloader, device):
     optimizer = take_optimizer(model)
     accuracy_fn = take_accuracy(device)
 
+    # LR scheduler
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+        optimizer, mode='min', factor=0.5, patience=3, min_lr=1e-5
+    )
+    best_acc = 0.0
+    model_name = model.__class__.__name__
+
     for epoch in range(epochs):
-        print(f"\n{epoch + 1}/{epochs}:")
-        train_step(
+        print(f"{epoch + 1}/{epochs}:")
+        train_loss, train_acc = train_step(
             data_loader=train_dataloader,
             model=model,
             loss_fn=loss_fn,
@@ -22,27 +29,40 @@ def train_loop(model, epochs, train_dataloader, test_dataloader, device):
             accuracy_fn=accuracy_fn,
             device=device
         )
-        test_step(
+        test_loss, test_acc = test_step(
             data_loader=test_dataloader,
             model=model,
             loss_fn=loss_fn,
             accuracy_fn=accuracy_fn,
             device=device
         )
+        scheduler.step(test_loss)
 
+        if test_acc > best_acc:
+            best_acc = test_acc
+            torch.save(model.state_dict(), f"{model.__class__.__name__}_best.pth")
 
-def save_model_params(model: torch.nn.Module, outpath="weights"):
+    print(f"\nSaved at best test accuracy: {best_acc*100:.4f}%")
+    return model_name, best_acc
+
+def save_model_params(model: torch.nn.Module, outdir="weights"):
     """
-    Returns: weight and bias as .txt file
-        e.g: model1.weight.txt, model1.bias.txt
+    Save model parameters
+
+    Returns:
+        weight & bias as .txt and model.state_dict() as .pth file
     """
+    os.makedirs(outdir, exist_ok=True)
+    model_name = model.__class__.__name__
+    outpath = os.path.join(outdir, model_name)
     os.makedirs(outpath, exist_ok=True)
 
     for name, param in model.named_parameters():
-        filename = f"{name.replace('.', '_')}.txt"
-        filepath = os.path.join(outpath, filename)
-        np.savetxt(filepath, param.detach().cpu().numpy(), fmt="%.6f")
-    torch.save(model.state_dict(), f"{model.__class__.__name__}.pth")
+        np.savetxt(os.path.join(outpath, f"{name.replace('.', '_')}.txt"),
+                   param.detach().cpu().numpy(), fmt="%.6f")
+
+    torch.save(model.state_dict(), os.path.join(outpath, f"{model_name}.pth"))
+    print(f"Saved weights for {model_name} to '{outpath}/'")
 
 
 def train_step(model: torch.nn.Module,
@@ -51,6 +71,12 @@ def train_step(model: torch.nn.Module,
                optimizer: torch.optim.Optimizer,
                accuracy_fn,
                device: torch.device):
+    """
+    Train by step.
+
+    Returns:
+        (tuple): avg_loss, avg_acc
+    """
     train_loss, train_acc = 0, 0
     model.to(device)
     for batch, (X, y) in enumerate(data_loader):
@@ -72,6 +98,7 @@ def train_step(model: torch.nn.Module,
     train_loss /= len(data_loader)
     train_acc /= len(data_loader)
     print(f"Train loss: {train_loss:.5f} | Train accuracy: {train_acc*100:.4f}%")
+    return train_loss, train_acc
 
 
 def test_step(data_loader: torch.utils.data.DataLoader,
@@ -79,6 +106,12 @@ def test_step(data_loader: torch.utils.data.DataLoader,
               loss_fn: torch.nn.Module,
               accuracy_fn: torchmetrics,
               device: torch.device):
+    """
+    Test by step.
+
+    Returns:
+        (tuple): avg_loss, avg_acc
+    """
     test_loss, test_acc = 0, 0
     model.to(device)
 
@@ -95,6 +128,7 @@ def test_step(data_loader: torch.utils.data.DataLoader,
         test_loss /= len(data_loader)
         test_acc /= len(data_loader)
         print(f"Test loss: {test_loss:.5f} | Test accuracy: {test_acc*100:.4f}%\n")
+    return test_loss, test_acc
 
 
 def eval_model(model: torch.nn.Module,
