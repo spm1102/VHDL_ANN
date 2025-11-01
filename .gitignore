@@ -1,0 +1,11 @@
+.idea/
+*.iml
+*.xml
+*.data.migration
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+/ann_torch/data/
