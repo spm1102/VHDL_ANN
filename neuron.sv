@@ -10,11 +10,11 @@ module neuron #(
     input reg signed [LAYER_DATA_WIDTH-1 : 0] data_in [0:NEURON_WIDTH - 1],
     input reg signed [B_BITS-1 : 0] bias,
     
-    output reg signed [NEURON_BITS + 7 : 0] neuron_out
+    output reg signed [LAYER_DATA_WIDTH + 7 : 0] neuron_out
 ); 
 
-wire signed [DATA_WIDTH-1 : 0] bus_w;
-wire signed [NEURON_BITS-1 : 0] bus_x;
+reg signed [LAYER_DATA_WIDTH-1 : 0] bus_w;
+reg signed [LAYER_DATA_WIDTH-1 : 0] bus_x;
 
 reg signed [LAYER_DATA_WIDTH + 15: 0] mult_result;
 reg signed [LAYER_DATA_WIDTH + 23 : 0] adder_result;
@@ -34,14 +34,14 @@ always @(posedge clk or negedge rst_n) begin
         // Apply activation function (ReLU)
         if (activation_func) begin
             if (adder_result > 0) begin
-                neuron_out <= adder_result[NEURON_BITS + 7 : 0];
+                neuron_out <= adder_result[LAYER_DATA_WIDTH + 7 : 0];
             end
             else begin
                 neuron_out <= 0;
             end
         end
         else begin
-            neuron_out <= adder_result[NEURON_BITS + 7 : 0];
+            neuron_out <= adder_result[LAYER_DATA_WIDTH + 7 : 0];
         end
     end
 end

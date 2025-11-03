@@ -19,7 +19,7 @@ module neural_network #(
     input reg signed [LAYER1_B_BITS-1:0] bias_layer1 [0:LAYER1_NEURON_NUM-1],
 
     //weight & bias for layer 2
-    input reg signed [LAYER2_DATA_WIDTH-1:0] weight_layer2[0:LAYER2_NEURON_NUM-1] [0:LAYER2_NEURON_WIDTH-1],
+    input reg signed [LAYER1_DATA_WIDTH-1:0] weight_layer2[0:LAYER2_NEURON_NUM-1] [0:LAYER2_NEURON_WIDTH-1],
     input reg signed [LAYER2_B_BITS-1:0] bias_layer2 [0:LAYER2_NEURON_NUM-1],
 
     output reg signed [LAYER2_DATA_WIDTH+7:0] output_data [0:LAYER2_NEURON_NUM-1]
