@@ -34,7 +34,6 @@ class model2(nn.Module):
         return x
 
 
-
 class model3(nn.Module):
     """784 -> 256 -> 128 -> 64 -> 10"""
     def __init__(self):

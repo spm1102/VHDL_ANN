@@ -1,23 +1,31 @@
-import torch
-from torchvision import datasets
-from torchvision.transforms import ToTensor
-from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
+import torch
+from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
 
-def take_dataset(download: bool = False):
-    """Only ToTensor() transform to """
+from binarization import BaseThresholdTransform
+
+
+def take_dataset(download: bool = False,
+                 threshold_transform: BaseThresholdTransform = None):
+    transform_list = [transforms.ToTensor()]
+    if threshold_transform is not None:
+        transform_list.append(threshold_transform)
+
+    full_transform = transforms.Compose(transform_list)
+
     train_data = datasets.MNIST(
         root="data",
         train=True,
-        download=download, # download if not on disk
-        transform=ToTensor(),
+        download=download,
+        transform=full_transform,
         target_transform=None
     )
     test_data = datasets.MNIST(
         root="data",
         train=False,
         download=download,
-        transform=ToTensor()
+        transform=full_transform
     )
     return train_data, test_data
 
