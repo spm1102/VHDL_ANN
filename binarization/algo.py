@@ -26,7 +26,6 @@ class OtsuThreshold(BaseThresholdTransform):
 
     def __call__(self, img_tensor):
         img_int = (img_tensor * 255).long() # [0, 255] for histogram
-
         img_flat = img_int.view(-1).float()
 
         # Histogram (normalized)
@@ -57,29 +56,24 @@ class SauvolaThreshold(BaseThresholdTransform):
 
     def __call__(self, img_tensor):
         x = img_tensor.unsqueeze(0)  # [1, 1, H, W]
-
         # Pad reflect
         x_padded = F.pad(
             x,
             (self.padding, self.padding, self.padding, self.padding),
             mode='reflect'
         )
-
         # Local mean
         mean = F.avg_pool2d(
             x_padded, kernel_size=self.window_size, stride=1, padding=0
         )
-
         # Local mean of squares
         mean_sq = F.avg_pool2d(
             x_padded ** 2, kernel_size=self.window_size, stride=1, padding=0
         )
-
         # Std
         var = mean_sq - mean ** 2
         std = torch.sqrt(F.relu(var))
 
         threshold = mean * (1 + self.k * ((std / self.R) - 1))
-
         # Compare with x (no pad, shape [1, 1, H, W])
         return (x > threshold).float().squeeze(0)  # [1, H, W]
