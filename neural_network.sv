@@ -15,27 +15,27 @@ module neural_network #(
     input reg signed [LAYER1_DATA_WIDTH-1:0] input_data [0:LAYER1_NEURON_WIDTH-1],
 
     //weight & bias for layer 1
-    input reg signed [LAYER1_DATA_WIDTH-1:0] weight_layer1[0:LAYER1_NEURON_NUM-1] [0:LAYER1_NEURON_WIDTH-1],
+    input reg signed [LAYER1_DATA_WIDTH-1:0] weight_layer1 [0:LAYER1_NEURON_NUM-1] [0:LAYER1_NEURON_WIDTH-1],
     input reg signed [LAYER1_B_BITS-1:0] bias_layer1 [0:LAYER1_NEURON_NUM-1],
 
     //weight & bias for layer 2
-    input reg signed [LAYER1_DATA_WIDTH-1:0] weight_layer2[0:LAYER2_NEURON_NUM-1] [0:LAYER2_NEURON_WIDTH-1],
+    input reg signed [LAYER1_DATA_WIDTH-1:0] weight_layer2 [0:LAYER2_NEURON_NUM-1] [0:LAYER2_NEURON_WIDTH-1],
     input reg signed [LAYER2_B_BITS-1:0] bias_layer2 [0:LAYER2_NEURON_NUM-1],
 
     output reg signed [LAYER2_DATA_WIDTH+7:0] output_data [0:LAYER2_NEURON_NUM-1]
 );
     wire signed [LAYER1_DATA_WIDTH+7:0] layer1_out [0:LAYER2_NEURON_WIDTH-1];
 
-    assign layer1_out[0] = 40'h00000000;
-    assign layer1_out[1] = 40'h00000000;
-    assign layer1_out[2] = 40'h00000000;
-    assign layer1_out[3] = 40'h00000000;
-    assign layer1_out[4] = 40'h00000000;
-    assign layer1_out[5] = 40'h00000000;
-    assign layer1_out[6] = 40'h00000000;
-    assign layer1_out[7] = 40'h00000000;
-    assign layer1_out[8] = 40'h00000000;
-    assign layer1_out[9] = 40'h00000000;
+    assign layer1_out[0]  = 40'h00000000;
+    assign layer1_out[1]  = 40'h00000000;
+    assign layer1_out[2]  = 40'h00000000;
+    assign layer1_out[3]  = 40'h00000000;
+    assign layer1_out[4]  = 40'h00000000;
+    assign layer1_out[5]  = 40'h00000000;
+    assign layer1_out[6]  = 40'h00000000;
+    assign layer1_out[7]  = 40'h00000000;
+    assign layer1_out[8]  = 40'h00000000;
+    assign layer1_out[9]  = 40'h00000000;
     assign layer1_out[10] = 40'h00000000;
     assign layer1_out[11] = 40'h00000000;
     assign layer1_out[12] = 40'h00000000;
@@ -44,7 +44,7 @@ module neural_network #(
     assign layer1_out[15] = 40'h00000000;
     assign layer1_out[16] = 40'h00000000;
     assign layer1_out[17] = 40'h00000000;
-    assign layer1_out[18]= 40'h00000000;
+    assign layer1_out[18] = 40'h00000000;
     assign layer1_out[19] = 40'h00000000;
     assign layer1_out[30] = 40'h00000000;
     assign layer1_out[31] = 40'h00000000;
