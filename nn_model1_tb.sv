@@ -48,13 +48,13 @@ module nn_model1_tb #(
   always #5 clk = ~clk;
   
     integer k;
-
+    integer outfile;
     initial begin
-        $readmemh("ann_torch/weights_hex/model1_no_bin/fc1_weight.mem", weight_layer1);
-        $readmemh("ann_torch/weights_hex/model1_no_bin/fc2_weight.mem", weight_layer2);
-        $readmemh("ann_torch/weights_hex/model1_no_bin/input.mem",      data_in);
-        $readmemh("ann_torch/weights_hex/model1_no_bin/fc1_bias.mem",   b1);
-        $readmemh("ann_torch/weights_hex/model1_no_bin/fc2_bias.mem",   b2);
+        $readmemh("D:/HUST/2025.1/vhdl/model1_no_bin/fc1_weight.mem", weight_layer1);
+        $readmemh("D:/HUST/2025.1/vhdl/model1_no_bin/fc2_weight.mem", weight_layer2);
+        $readmemh("D:/HUST/2025.1/vhdl/model1_no_bin/input.mem",      data_in);
+        $readmemh("D:/HUST/2025.1/vhdl/model1_no_bin/fc1_bias.mem",   b1);
+        $readmemh("D:/HUST/2025.1/vhdl/model1_no_bin/fc2_bias.mem",   b2);
         
         clk   <= 0;
         rst_n <= 0;
@@ -67,6 +67,26 @@ module nn_model1_tb #(
             $display("logit[%0d] = %h (%0d)", 
                     k, neuralnet_out[k], neuralnet_out[k]);
         end
+
+        // =============================
+        // WRITE OUTPUT FILE
+        // =============================
+        
+        outfile = $fopen(
+            "D:/HUST/2025.1/vhdl/model1_no_bin/output_logits.txt", "w"
+        );
+
+        if (outfile == 0) begin
+            $display("ERROR: cannot open output file");
+            $finish;
+        end
+
+        // 1 neuron / 1 line
+        for (k = 0; k < LAYER2_NEURON_NUM; k = k + 1) begin
+            $fwrite(outfile, "%0d %0d\n", k, neuralnet_out[k]);
+        end
+
+        $fclose(outfile);
 
         #20 $finish;
     end
