@@ -18,17 +18,22 @@ module nn_model1 #(
 
     input  reg signed [LAYER1_DATA_WIDTH-1:0] input_data   [0:LAYER1_NEURON_WIDTH-1],
 
-    // weight & bias layer 1: [LAYER1_NEURON_NUM x LAYER1_NEURON_WIDTH]
-    input  reg signed [LAYER1_DATA_WIDTH-1:0] weight_layer1 [0:LAYER1_NEURON_NUM-1] [0:LAYER1_NEURON_WIDTH-1],
-    input  reg signed [LAYER1_B_BITS-1:0]     bias_layer1   [0:LAYER1_NEURON_NUM-1],
-
-    // weight & bias layer 2: [LAYER2_NEURON_NUM x LAYER2_NEURON_WIDTH]
-    input  reg signed [LAYER2_DATA_WIDTH-1:0] weight_layer2 [0:LAYER2_NEURON_NUM-1] [0:LAYER2_NEURON_WIDTH-1],
-    input  reg signed [LAYER2_B_BITS-1:0]     bias_layer2   [0:LAYER2_NEURON_NUM-1],
-
+    // output img_ready,
     output reg signed [LAYER2_DATA_WIDTH-1:0] output_data [0:LAYER2_NEURON_NUM-1]
 );
+    reg signed [LAYER1_DATA_WIDTH-1:0] weight_layer1 [0:LAYER1_NEURON_NUM-1][0:LAYER1_NEURON_WIDTH-1];
+    reg signed [LAYER1_B_BITS-1:0]     bias_layer1   [0:LAYER1_NEURON_NUM-1];
+    
+    reg signed [LAYER2_DATA_WIDTH-1:0] weight_layer2 [0:LAYER2_NEURON_NUM-1][0:LAYER2_NEURON_WIDTH-1];
+    reg signed [LAYER2_B_BITS-1:0]     bias_layer2   [0:LAYER2_NEURON_NUM-1];
 
+
+    initial begin
+        $readmemh("D:/HUST/2025.1/vhdl/model1_no_bin/fc1_weight.mem", weight_layer1);
+        $readmemh("D:/HUST/2025.1/vhdl/model1_no_bin/fc1_bias.mem",   bias_layer1);
+        $readmemh("D:/HUST/2025.1/vhdl/model1_no_bin/fc2_weight.mem", weight_layer2);
+        $readmemh("D:/HUST/2025.1/vhdl/model1_no_bin/fc2_bias.mem",   bias_layer2);
+    end
     wire signed [LAYER2_DATA_WIDTH-1:0] layer1_out [0:LAYER2_NEURON_WIDTH-1];
 
     layer #(
@@ -62,5 +67,6 @@ module nn_model1 #(
         .activation_func(1'b0),           // Linear
         .data_out       (output_data)
     );
+
 
 endmodule
