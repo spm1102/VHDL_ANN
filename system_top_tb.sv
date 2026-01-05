@@ -9,7 +9,7 @@ module system_top_tb;
     parameter INPUT_BASE_ADDR  = 32'h0000_0000;
     parameter OUTPUT_BASE_ADDR = 32'h0000_5000; 
     parameter NUM_IMGS         = 10;             
-    parameter IMG_SIZE         = 784;          
+    parameter IMG_SIZE         = 196;          
 
     reg clk;
     reg rst_n;
@@ -110,7 +110,7 @@ module system_top_tb;
         rst_n = 1;
         $display("[%0t] Reset released. System start.", $time);
 
-        #200000; 
+        #45000; 
 
         check_results();
 

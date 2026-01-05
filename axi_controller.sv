@@ -1,7 +1,7 @@
 module axi_controller #(
     parameter ADDR_WIDTH = 32,
     parameter DATA_WIDTH = 32,
-    parameter IMG_SIZE   = 784,         
+    parameter IMG_SIZE   = 196,         
     parameter OUTPUT_SIZE= 10,
     parameter NUM_IMGS   = 10,
     parameter INPUT_BASE_ADDR  = 32'h0000_0000,
@@ -77,7 +77,7 @@ module axi_controller #(
                     //
                 end
                 UPDATE_ADDR: begin
-                    if (burst_count == 3) begin
+                    if (burst_count == 0) begin
                         burst_count <= 0;
                         pp_rd_bank_sel <= ~pp_rd_bank_sel; 
                     end else begin
@@ -115,7 +115,7 @@ module axi_controller #(
             end
 
             UPDATE_ADDR: begin
-                if(burst_count == 3) begin
+                if(burst_count == 0) begin
                     next_state = WAIT_PROCESS;
                 end else begin
                     next_state = READ_IMG;

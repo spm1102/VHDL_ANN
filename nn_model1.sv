@@ -29,14 +29,14 @@ module nn_model1 #(
 
 
     initial begin
-        $readmemh("D:/HUST/2025.1/vhdl/model1_no_bin/fc1_weight.mem", weight_layer1);
-        $readmemh("D:/HUST/2025.1/vhdl/model1_no_bin/fc1_bias.mem",   bias_layer1);
-        $readmemh("D:/HUST/2025.1/vhdl/model1_no_bin/fc2_weight.mem", weight_layer2);
-        $readmemh("D:/HUST/2025.1/vhdl/model1_no_bin/fc2_bias.mem",   bias_layer2);
+        $readmemh("D:/HUST/2025.1/vhdl/model1_no_bin/196_bin/fc1_weight196_bin.mem", weight_layer1);
+        $readmemh("D:/HUST/2025.1/vhdl/model1_no_bin/196_bin/fc1_bias196_bin.mem",   bias_layer1);
+        $readmemh("D:/HUST/2025.1/vhdl/model1_no_bin/196_bin/fc2_weight196_bin.mem", weight_layer2);
+        $readmemh("D:/HUST/2025.1/vhdl/model1_no_bin/196_bin/fc2_bias196_bin.mem",   bias_layer2);
     end
     wire signed [LAYER2_DATA_WIDTH-1:0] layer1_out [0:LAYER2_NEURON_WIDTH-1];
 
-    layer #(
+    layer1 #(
         .LAYER_DATA_WIDTH(LAYER1_DATA_WIDTH),
         .NEURON_NUM      (LAYER1_NEURON_NUM),
         .NEURON_WIDTH    (LAYER1_NEURON_WIDTH),

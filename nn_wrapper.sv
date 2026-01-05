@@ -1,6 +1,15 @@
 module nn_wrapper #(
+    parameter LAYER1_DATA_WIDTH   = 32'd32,
+    parameter LAYER1_NEURON_WIDTH = 32'd196,
+    parameter LAYER1_NEURON_NUM   = 32'd32,
+    parameter LAYER1_B_BITS       = 32'd32,
+
+    parameter LAYER2_DATA_WIDTH   = 32'd32,
+    parameter LAYER2_NEURON_WIDTH = LAYER1_NEURON_NUM,
+    parameter LAYER2_NEURON_NUM   = 32'd10,
+    parameter LAYER2_B_BITS       = 32'd32,
     parameter DATA_WIDTH = 32,
-    parameter IMG_SIZE   = 784
+    parameter IMG_SIZE   = 196
 )(
     input wire clk,
     input wire rst_n,
@@ -26,7 +35,16 @@ module nn_wrapper #(
     reg       calculating;
     reg [3:0] calc_wait; 
 
-    nn_model1 u_ann (
+    nn_model1 #(
+        .LAYER1_DATA_WIDTH(LAYER1_DATA_WIDTH),
+        .LAYER1_NEURON_WIDTH(LAYER1_NEURON_WIDTH),
+        .LAYER1_NEURON_NUM(LAYER1_NEURON_NUM),
+        .LAYER1_B_BITS(LAYER1_B_BITS),
+        .LAYER2_DATA_WIDTH(LAYER2_DATA_WIDTH),
+        .LAYER2_NEURON_WIDTH(LAYER2_NEURON_WIDTH),
+        .LAYER2_NEURON_NUM(LAYER2_NEURON_NUM),
+        .LAYER2_B_BITS(LAYER2_B_BITS)
+    ) u_ann (
         .clk(clk),
         .rst_n(rst_n),
         .input_data(nn_input_array),

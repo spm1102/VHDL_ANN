@@ -1,7 +1,7 @@
 module ping_pong_buffer #(
     parameter DATA_WIDTH = 32,
-    parameter IMG_W      = 28,
-    parameter IMG_H      = 28,
+    parameter IMG_W      = 14,
+    parameter IMG_H      = 14,
     parameter IMG_SIZE   = IMG_W * IMG_H,         
     parameter ADDR_WIDTH = $clog2(IMG_SIZE)
 )(

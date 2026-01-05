@@ -153,7 +153,7 @@ module system_top #(
     // Ping Pong Buffer
     ping_pong_buffer #(
         .DATA_WIDTH(32),
-        .IMG_W(28), .IMG_H(28)
+        .IMG_W(14), .IMG_H(14)
     ) u_buffer (
         .clk(clk), 
         .rst(~rst_n),
@@ -164,7 +164,7 @@ module system_top #(
         .wr_bank_sel(), 
         
         // Read 
-        .rd_addr(nn_rd_addr[9:0]),
+        .rd_addr(nn_rd_addr[7:0]),
         .rd_bank_sel(pp_rd_bank_sel),
         .rd_data(nn_rd_data)
     );
